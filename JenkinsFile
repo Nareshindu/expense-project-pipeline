@@ -309,6 +309,7 @@ pipeline {
                     sudo mkdir -p /expense/expense-frontend
                     sudo chown -R jenkins:jenkins /expense/expense-frontend
                     sudo git clone https://github.com/Nareshindu/expense-frontend.git /expense/expense-frontend
+                    sudo chown -R jenkins:jenkins /expense/expense-frontend
                 '''
             }
         }
