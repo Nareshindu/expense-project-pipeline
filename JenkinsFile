@@ -266,6 +266,7 @@ pipeline {
                 sh '''
                      sudo rm -rf /opt/expense-backend
                      sudo mkdir -p /opt/expense-backend
+                     sudo chown -R jenkins:jenkins /opt/expense-frontend
                      sudo git clone https://github.com/Nareshindu/expense-backend.git /opt/expense-backend
                 '''
             }
@@ -306,6 +307,7 @@ pipeline {
                 sh '''
                     sudo rm -rf /opt/expense-frontend
                     sudo mkdir -p /opt/expense-frontend
+                    sudo chown -R jenkins:jenkins /opt/expense-frontend
                     sudo git clone https://github.com/Nareshindu/expense-frontend.git /opt/expense-frontend
                 '''
             }
