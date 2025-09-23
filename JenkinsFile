@@ -255,39 +255,40 @@ pipeline {
     }
 
     environment {
-        SONARQUBE_ENV = 'MySonarQube'  // Jenkins -> SonarQube Server name
+        // SONARQUBE_ENV = 'MySonarQube'  // Jenkins -> SonarQube Server name
         BACKEND_VM = 'ec2-user@<54.234.40.24'
         FRONTEND_VM = 'ec2-user@107.22.0.123'
     }
 
-    stages {
         stage('Clone Backend Repo') {
             steps {
                 sh '''
-                cd /opt
-                rm -rf expense-backend
-                mkdir -p expense-backend
-                cd expense-backend
-                git clone https://github.com/Nareshindu/expense-backend.git .
+                    sudo rm -rf /opt/expense-backend
+                    sudo mkdir -p /opt/expense-backend
+                    sudo git clone https://github.com/Nareshindu/expense-backend.git /opt/expense-backend
                 '''
             }
-        }    
+        }
 
-        // stage('Backend - Build') {
-        //     steps {
-        //         dir('backend') {
-        //             sh 'mvn clean package -DskipTests'
-        //         }
-        //     }
-        // }
+        stage('Backend - Build') {
+            steps {
+                sh '''
+                    cd /opt/expense-backend
+                    mvn clean package -DskipTests
+                '''
+            }
+        }
 
-        // stage('Backend - Test') {
-        //     steps {
-        //         dir('backend') {
-        //             sh 'mvn test'
-        //         }
-        //     }
-        // }
+
+
+        stage('Backend - Test') {
+            steps {
+                sh '''
+                    cd /opt/expense-backend
+                    sh 'mvn test'
+                '''
+            }
+        }
 
         // stage('Backend - SonarQube Analysis') {
         //     steps {
@@ -302,33 +303,33 @@ pipeline {
         stage('Clone Frontend Repo') {
             steps {
                 sh '''
-                cd /opt
-                rm -rf expense-frontend
-                mkdir -p expense-frontend
-                cd expense-frontend
-                git clone https://github.com/Nareshindu/expense-frontend.git .
+                    sudo rm -rf /opt/expense-frontend
+                    sudo mkdir -p /opt/expense-frontend
+                    sudo git clone https://github.com/Nareshindu/expense-frontend.git /opt/expense-frontend
+                '''
+            }
+    }
+
+        stage('Frontend - Build') {
+            steps {
+                sh '''
+                    cd /opt/expense-frontend
+                    npm install
+                    npm run build
                 '''
             }
         }
 
-        // stage('Frontend - Build') {
-        //     steps {
-        //         dir('frontend') {
-        //             sh '''
-        //                 npm install
-        //                 npm run build
-        //             '''
-        //         }
-        //     }
-        // }
 
-        // stage('Frontend - Test') {
-        //     steps {
-        //         dir('frontend') {
-        //             sh 'npm test -- --watchAll=false'
-        //         }
-        //     }
-        // }
+
+        stage('Frontend - Test') {
+            steps {
+                sh '''
+                    cd /opt/expense-frontend
+                    npm test -- --watchAll=false
+                '''
+            }
+        }
 
         // stage('Frontend - SonarQube Analysis') {
         //     steps {
@@ -342,19 +343,31 @@ pipeline {
 
         stage('Deploy to Backend VM') {
             steps {
-                sh '''
-                    scp -o StrictHostKeyChecking=no backend/target/*.jar $BACKEND_VM:/home/ec2-user/
-                    ssh -o StrictHostKeyChecking=no $BACKEND_VM "pkill -f expense-backend || true"
-                    ssh -o StrictHostKeyChecking=no $BACKEND_VM "nohup java -jar /home/ec2-user/*.jar > app.log 2>&1 &"
-                '''
+                withCredentials([usernamePassword(
+                    credentialsId: 'Nodes-creds',
+                    usernameVariable: 'SSH_USER',
+                    passwordVariable: 'SSH_PASS'
+                )]) {
+                    sh '''
+                        sshpass -p "$SSH_PASS" scp -o StrictHostKeyChecking=no backend/target/*.jar $SSH_USER@$BACKEND_VM:/home/ec2-user/
+                        sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no $SSH_USER@$BACKEND_VM "pkill -f expense-backend || true"
+                        sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no $SSH_USER@$BACKEND_VM "nohup java -jar /home/ec2-user/*.jar > app.log 2>&1 &"
+                    '''
+                }
             }
         }
 
         stage('Deploy to Frontend VM') {
             steps {
-                sh '''
-                    scp -o StrictHostKeyChecking=no -r frontend/build/* $FRONTEND_VM:/var/www/html/
-                '''
+                withCredentials([usernamePassword(
+                    credentialsId: 'Nodes-creds',
+                    usernameVariable: 'SSH_USER',
+                    passwordVariable: 'SSH_PASS'
+                )]) {
+                    sh '''
+                        sshpass -p "$SSH_PASS" scp -o StrictHostKeyChecking=no -r frontend/build/* $SSH_USER@$FRONTEND_VM:/var/www/html/
+                    '''
+                }
             }
         }
     }
