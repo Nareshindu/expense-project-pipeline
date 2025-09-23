@@ -367,9 +367,20 @@ pipeline {
                     usernameVariable: 'SSH_USER',
                     passwordVariable: 'SSH_PASS'
                 )]) {
-                    sh '''
-                        sshpass -p "$SSH_PASS" scp -o StrictHostKeyChecking=no -r /expense/expense-frontend/build/* $SSH_USER@$FRONTEND_VM:/usr/share/nginx/html/
-                    '''
+                                            // Step 1: Copy build files to a temp folder
+                        sh '''
+                        sshpass -p "$SSH_PASS" scp -o StrictHostKeyChecking=no -r \
+                            /expense/expense-frontend/build/* \
+                            ec2-user@54.167.79.186:/home/ec2-user/temp-frontend/
+                        '''
+
+                        // Step 2: SSH and move with sudo
+                        sh '''
+                        sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no ec2-user@54.167.79.186 "\
+                        sudo rm -rf /usr/share/nginx/html/* && \
+                        sudo mv /home/ec2-user/temp-frontend/* /usr/share/nginx/html/"
+                        '''
+
                 }
             }
         }
