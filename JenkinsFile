@@ -259,6 +259,7 @@ pipeline {
         BACKEND_VM = 'ec2-user@3.80.85.71'
         FRONTEND_VM = 'ec2-user@54.167.79.186'
     }
+    stages {
 
         stage('Clone Backend Repo') {
             steps {
@@ -308,7 +309,7 @@ pipeline {
                     sudo git clone https://github.com/Nareshindu/expense-frontend.git /opt/expense-frontend
                 '''
             }
-    }
+        }
 
         stage('Frontend - Build') {
             steps {
