@@ -264,9 +264,9 @@ pipeline {
         stage('Clone Backend Repo') {
             steps {
                 sh '''
-                     rm -rf /opt/expense-backend
-                     mkdir -p /opt/expense-backend
-                     git clone https://github.com/Nareshindu/expense-backend.git /opt/expense-backend
+                     sudo rm -rf /opt/expense-backend
+                     sudo mkdir -p /opt/expense-backend
+                     sudo git clone https://github.com/Nareshindu/expense-backend.git /opt/expense-backend
                 '''
             }
         }
@@ -304,9 +304,9 @@ pipeline {
         stage('Clone Frontend Repo') {
             steps {
                 sh '''
-                     rm -rf /opt/expense-frontend
-                     mkdir -p /opt/expense-frontend
-                     git clone https://github.com/Nareshindu/expense-frontend.git /opt/expense-frontend
+                    sudo rm -rf /opt/expense-frontend
+                    sudo mkdir -p /opt/expense-frontend
+                    sudo git clone https://github.com/Nareshindu/expense-frontend.git /opt/expense-frontend
                 '''
             }
         }
