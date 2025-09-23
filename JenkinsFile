@@ -264,9 +264,9 @@ pipeline {
         stage('Clone Backend Repo') {
             steps {
                 sh '''
-                     sudo rm -rf /opt/expense-backend
-                     sudo mkdir -p /opt/expense-backend
-                     sudo chown -R jenkins:jenkins /opt/expense-frontend
+                     sudo rm -rf /expense/expense-backend
+                     sudo mkdir -p /expense/expense-backend
+                     sudo chown -R jenkins:jenkins /expense/expense-frontend
                      sudo git clone https://github.com/Nareshindu/expense-backend.git /opt/expense-backend
                 '''
             }
@@ -275,7 +275,7 @@ pipeline {
         stage('Backend - Build') {
             steps {
                 sh '''
-                    cd /opt/expense-backend
+                    cd /expense/expense-backend
                     mvn clean package -DskipTests
                 '''
             }
@@ -286,7 +286,7 @@ pipeline {
         stage('Backend - Test') {
             steps {
                 sh '''
-                    cd /opt/expense-backend
+                    cd /expense/expense-backend
                     sh 'mvn test'
                 '''
             }
@@ -305,9 +305,9 @@ pipeline {
         stage('Clone Frontend Repo') {
             steps {
                 sh '''
-                    sudo rm -rf /opt/expense-frontend
-                    sudo mkdir -p /opt/expense-frontend
-                    sudo chown -R jenkins:jenkins /opt/expense-frontend
+                    sudo rm -rf /expense/expense-frontend
+                    sudo mkdir -p /expense/expense-frontend
+                    sudo chown -R jenkins:jenkins /expense/expense-frontend
                     sudo git clone https://github.com/Nareshindu/expense-frontend.git /opt/expense-frontend
                 '''
             }
@@ -316,7 +316,7 @@ pipeline {
         stage('Frontend - Build') {
             steps {
                 sh '''
-                    cd /opt/expense-frontend
+                    cd /expense/expense-frontend
                     npm install
                     npm run build
                 '''
@@ -328,7 +328,7 @@ pipeline {
         stage('Frontend - Test') {
             steps {
                 sh '''
-                    cd /opt/expense-frontend
+                    cd /expense/expense-frontend
                     npm test -- --watchAll=false
                 '''
             }
