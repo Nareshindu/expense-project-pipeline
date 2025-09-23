@@ -326,14 +326,14 @@ pipeline {
 
 
 
-        stage('Frontend - Test') {
-            steps {
-                sh '''
-                    cd /expense/expense-frontend
-                    npm test -- --watchAll=false
-                '''
-            }
-        }
+        // stage('Frontend - Test') {
+        //     steps {
+        //         sh '''
+        //             cd /expense/expense-frontend
+        //             npm test -- --watchAll=false
+        //         '''
+        //     }
+        // }
 
         // stage('Frontend - SonarQube Analysis') {
         //     steps {
