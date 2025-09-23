@@ -354,7 +354,6 @@ pipeline {
                 )]) {
                     sh '''
                         sshpass -p "$SSH_PASS" scp -o StrictHostKeyChecking=no /expense/expense-backend/target/*.jar $SSH_USER@$BACKEND_VM:/home/ec2-user/
-                        sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no $SSH_USER@$BACKEND_VM "pkill -f expense-backend || true"
                         sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no $SSH_USER@$BACKEND_VM "nohup java -jar /home/ec2-user/*.jar > app.log 2>&1 &"
                     '''
                 }
