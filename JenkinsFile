@@ -264,10 +264,10 @@ pipeline {
         stage('Clone Backend Repo') {
             steps {
                 sh '''
-                     sudo rm -rf /expense/expense-backend
-                     sudo mkdir -p /expense/expense-backend
-                     sudo chown -R jenkins:jenkins /expense/expense-backend
-                     sudo git clone https://github.com/Nareshindu/expense-backend.git /expense/expense-backend
+                      rm -rf /expense/expense-backend
+                      mkdir -p /expense/expense-backend
+                      chown -R jenkins:jenkins /expense/expense-backend
+                      git clone https://github.com/Nareshindu/expense-backend.git /expense/expense-backend
                 '''
             }
         }
@@ -305,11 +305,11 @@ pipeline {
         stage('Clone Frontend Repo') {
             steps {
                 sh '''
-                    sudo rm -rf /expense/expense-frontend
-                    sudo mkdir -p /expense/expense-frontend
-                    sudo chown -R jenkins:jenkins /expense/expense-frontend
-                    sudo git clone https://github.com/Nareshindu/expense-frontend.git /expense/expense-frontend
-                    sudo chown -R jenkins:jenkins /expense/expense-frontend
+                     rm -rf /expense/expense-frontend
+                     mkdir -p /expense/expense-frontend
+                     chown -R jenkins:jenkins /expense/expense-frontend
+                     git clone https://github.com/Nareshindu/expense-frontend.git /expense/expense-frontend
+                     chown -R jenkins:jenkins /expense/expense-frontend
                 '''
             }
         }
