@@ -369,7 +369,13 @@ pipeline {
                 )]) {
                         // Step 2: SSH and move with sudo
                     sh '''
-                        scp -o StrictHostKeyChecking=no -r /expense/expense-frontend/build/* $SSH_USER@$FRONTEND_VM:/usr/share/nginx/html/
+                        scp -i "$SSH_KEY" -o StrictHostKeyChecking=no -r \
+                        /expense/expense-frontend/build/* \
+                        $SSH_USER@FRONTEND_VM:/tmp/
+
+                        ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no $SSH_USER@FRONTEND_VM "\
+                            sudo rm -rf /usr/share/nginx/html/* && \
+                            sudo mv /tmp/* /usr/share/nginx/html/"
                     '''
                 }
             }
