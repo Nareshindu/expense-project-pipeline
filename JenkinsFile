@@ -369,7 +369,7 @@ pipeline {
                 )]) {
                         // Step 2: SSH and move with sudo
                     sh '''
-                        scp -o StrictHostKeyChecking=no -r /expense/expense-frontend/build/* $SSH_USER@$FRONTEND_VM:/usr/share/nginx/html/
+                        sshpass -p "$SSH_PASS" scp -o StrictHostKeyChecking=no -r /expense/expense-frontend/build/* $SSH_USER@$FRONTEND_VM:/usr/share/nginx/html/
                     '''
                 }
             }
