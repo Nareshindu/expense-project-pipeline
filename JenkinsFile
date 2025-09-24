@@ -371,11 +371,11 @@ pipeline {
                     sh '''
                         scp -i "$SSH_KEY" -o StrictHostKeyChecking=no -r \
                         /expense/expense-frontend/build/* \
-                        $SSH_USER@FRONTEND_VM:/tmp/
+                        $SSH_USER@$FRONTEND_VM:/tmp/
 
-                        ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no $SSH_USER@FRONTEND_VM "\
-                            sudo rm -rf /usr/share/nginx/html/* && \
-                            sudo mv /tmp/* /usr/share/nginx/html/"
+                        ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no $SSH_USER@$FRONTEND_VM "\
+                        sudo rm -rf /usr/share/nginx/html/* && \
+                        sudo cp -r /tmp/* /usr/share/nginx/html/"
                     '''
                 }
             }
