@@ -256,8 +256,8 @@ pipeline {
 
     environment {
         // SONARQUBE_ENV = 'MySonarQube'  // Jenkins -> SonarQube Server name
-        BACKEND_VM = '3.80.85.71'
-        FRONTEND_VM = '54.167.79.186'
+        BACKEND_VM = '10.0.2.177'
+        FRONTEND_VM = '10.0.3.50'
     }
     stages {
 
