@@ -369,7 +369,15 @@ pipeline {
                 )]) {
                         // Step 2: SSH and move with sudo
                     sh '''
-                        sshpass -p "$SSH_PASS" scp -o StrictHostKeyChecking=no -r /expense/expense-frontend/build/* $SSH_USER@$FRONTEND_VM:/usr/share/nginx/html/
+                        # Step 1: Copy files to /tmp on remote
+                            sshpass -p "$SSH_PASS" scp -o StrictHostKeyChecking=no -r /expense/expense-frontend/build/* $SSH_USER@$FRONTEND_VM:/tmp/
+
+                            # Step 2: Remove old files, move new files, fix ownership
+                            sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no $SSH_USER@$FRONTEND_VM "
+                                sudo rm -rf /usr/share/nginx/html/* && \
+                                sudo mv /tmp/* /usr/share/nginx/html/ && \
+                                sudo chown -R nginx:nginx /usr/share/nginx/html/
+                            "
                     '''
                 }
             }
