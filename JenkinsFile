@@ -265,7 +265,7 @@ pipeline {
             steps {
                 sh '''
                       rm -rf /expense/expense-backend
-                      mkdir -p /expense/expense-backend
+                      sudo mkdir -p /expense/expense-backend
                       chown -R jenkins:jenkins /expense/expense-backend
                       git clone https://github.com/Nareshindu/expense-backend.git /expense/expense-backend
                 '''
@@ -306,7 +306,7 @@ pipeline {
             steps {
                 sh '''
                      rm -rf /expense/expense-frontend
-                     mkdir -p /expense/expense-frontend
+                     sudo mkdir -p /expense/expense-frontend
                      chown -R jenkins:jenkins /expense/expense-frontend
                      git clone https://github.com/Nareshindu/expense-frontend.git /expense/expense-frontend
                      chown -R jenkins:jenkins /expense/expense-frontend
